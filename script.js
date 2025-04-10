@@ -7,7 +7,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const copyBtn = document.getElementById('copyBtn');
     const successMessage = document.getElementById('successMessage');
     const backgroundAnimation = document.querySelector('.background-animation');
-    const timerDisplay = document.getElementById('timer');
     const warningOverlay = document.getElementById('warningOverlay');
     const closeWarningBtn = document.getElementById('closeWarning');
     
@@ -54,9 +53,6 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Initialize access check
     checkAccess();
-    
-    // Initialize timer
-    initTimer();
     
     // Create animated background circles
     createBackgroundCircles();
@@ -132,46 +128,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }, 3000);
         });
     });
-    
-    // Timer functionality
-    function initTimer() {
-        // Set a fixed start date (this will be the same for all users)
-        const fixedStartDate = new Date('2024-03-20T00:00:00Z'); // UTC time
-        
-        function calculateTimeLeft() {
-            const now = new Date();
-            const timeSinceStart = now - fixedStartDate;
-            const daysSinceStart = Math.floor(timeSinceStart / (1000 * 60 * 60 * 24));
-            const currentCycleDay = daysSinceStart % 7; // 7-day cycle
-            
-            // Calculate end time for current cycle
-            const cycleStart = new Date(fixedStartDate);
-            cycleStart.setDate(cycleStart.getDate() + (daysSinceStart - currentCycleDay));
-            const endTime = new Date(cycleStart);
-            endTime.setDate(endTime.getDate() + 7);
-            
-            return endTime - now;
-        }
-        
-        // Update timer every second
-        const timerInterval = setInterval(function() {
-            const timeLeft = calculateTimeLeft();
-            
-            if (timeLeft <= 0) {
-                // Timer will automatically reset to next 7-day cycle
-                const timeLeft = calculateTimeLeft();
-            }
-            
-            // Calculate days, hours, minutes, seconds
-            const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
-            
-            // Format time
-            timerDisplay.textContent = `${days}:${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-        }, 1000);
-    }
     
     // Background animations
     function createBackgroundCircles() {
