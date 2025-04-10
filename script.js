@@ -131,51 +131,227 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Background animations
     function createBackgroundCircles() {
-        const colors = [
-            'rgba(67, 97, 238, 0.3)',
-            'rgba(114, 9, 183, 0.3)',
-            'rgba(247, 37, 133, 0.2)',
-            'rgba(255, 158, 0, 0.2)'
-        ];
+        // Clear existing background
+        backgroundAnimation.innerHTML = '';
         
-        for (let i = 0; i < 6; i++) {
-            const circle = document.createElement('div');
-            circle.classList.add('floating-circle');
+        // Create stars
+        createStars();
+        
+        // Create shooting stars
+        createShootingStars();
+        
+        // Create nebulae
+        createNebulae();
+    }
+    
+    // Create starry background
+    function createStars() {
+        const starCount = 200;
+        
+        for (let i = 0; i < starCount; i++) {
+            const star = document.createElement('div');
+            star.classList.add('star');
             
-            // Randomize properties
-            const size = Math.random() * 200 + 100;
-            const color = colors[Math.floor(Math.random() * colors.length)];
+            // Random size between 1 and 3px
+            const size = Math.random() * 2 + 1;
             
             // Position randomly
             const posX = Math.random() * 100;
             const posY = Math.random() * 100;
             
-            // Set animation properties
-            const translateX = (Math.random() - 0.5) * 50;
-            const translateY = (Math.random() - 0.5) * 50;
-            const rotation = Math.random() * 360;
-            const duration = Math.random() * 20 + 15;
+            // Random opacity
+            const opacity = Math.random() * 0.5 + 0.3;
+            const opacityMax = Math.min(opacity + 0.2, 1);
+            
+            // Random duration
+            const duration = Math.random() * 5 + 3;
             
             // Apply styles
-            circle.style.width = `${size}px`;
-            circle.style.height = `${size}px`;
-            circle.style.backgroundColor = color;
-            circle.style.left = `${posX}%`;
-            circle.style.top = `${posY}%`;
-            circle.style.setProperty('--translate-x', `${translateX}px`);
-            circle.style.setProperty('--translate-y', `${translateY}px`);
-            circle.style.setProperty('--rotate', `${rotation}deg`);
-            circle.style.animation = `floatingCircle ${duration}s ease-in-out infinite alternate`;
+            star.style.width = `${size}px`;
+            star.style.height = `${size}px`;
+            star.style.left = `${posX}%`;
+            star.style.top = `${posY}%`;
+            star.style.setProperty('--opacity', opacity);
+            star.style.setProperty('--opacity-max', opacityMax);
+            star.style.setProperty('--duration', `${duration}s`);
             
-            backgroundAnimation.appendChild(circle);
+            // Add a subtle glow to brighter stars
+            if (size > 2) {
+                star.style.boxShadow = `0 0 ${size * 2}px rgba(255, 255, 255, 0.8)`;
+            }
+            
+            backgroundAnimation.appendChild(star);
         }
+    }
+    
+    // Create shooting stars
+    function createShootingStars() {
+        // Create multiple shooting stars with delays
+        for (let i = 0; i < 15; i++) {
+            const shootingStar = document.createElement('div');
+            shootingStar.classList.add('shooting-star');
+            
+            // Random angle
+            const angle = Math.random() * 20 - 10; // -10 to +10 degrees
+            
+            // Random position and timing
+            const top = Math.random() * 70; // Top 70% of screen
+            const delay = Math.random() * 15;
+            const duration = Math.random() * 5 + 5; // 5-10 seconds
+            
+            // Apply styles
+            shootingStar.style.setProperty('--angle', `${angle}deg`);
+            shootingStar.style.setProperty('--top', `${top}%`);
+            shootingStar.style.setProperty('--delay', `${delay}s`);
+            shootingStar.style.setProperty('--duration', `${duration}s`);
+            
+            // Set length - longer tail for shooting stars
+            shootingStar.style.width = `${Math.random() * 50 + 30}px`;
+            
+            backgroundAnimation.appendChild(shootingStar);
+        }
+    }
+    
+    // Create nebulae
+    function createNebulae() {
+        const colors = [
+            'rgba(139, 92, 246, 0.5)',  // purple
+            'rgba(217, 70, 239, 0.5)',  // pink
+            'rgba(37, 99, 235, 0.5)',   // blue
+            'rgba(16, 185, 129, 0.5)'   // green
+        ];
+        
+        // Create a few nebula clouds
+        for (let i = 0; i < 4; i++) {
+            const nebula = document.createElement('div');
+            nebula.classList.add('nebula');
+            
+            // Size and position
+            const size = Math.random() * 400 + 300;
+            const posX = Math.random() * 100;
+            const posY = Math.random() * 100;
+            
+            // Movement parameters
+            const translateX = (Math.random() - 0.5) * 20 + '%';
+            const translateY = (Math.random() - 0.5) * 20 + '%';
+            const scale = Math.random() * 0.5 + 0.8;
+            
+            // Opacity changes
+            const opacityStart = Math.random() * 0.05 + 0.05;
+            const opacityMid = Math.random() * 0.1 + 0.1;
+            const opacityEnd = Math.random() * 0.05 + 0.05;
+            
+            // Apply styles
+            nebula.style.width = `${size}px`;
+            nebula.style.height = `${size}px`;
+            nebula.style.left = `${posX}%`;
+            nebula.style.top = `${posY}%`;
+            nebula.style.setProperty('--color-center', colors[i % colors.length]);
+            nebula.style.setProperty('--translate-x', translateX);
+            nebula.style.setProperty('--translate-y', translateY);
+            nebula.style.setProperty('--scale', scale.toString());
+            nebula.style.setProperty('--opacity-start', opacityStart.toString());
+            nebula.style.setProperty('--opacity-mid', opacityMid.toString());
+            nebula.style.setProperty('--opacity-end', opacityEnd.toString());
+            
+            backgroundAnimation.appendChild(nebula);
+        }
+    }
+    
+    // Create floating particles (now used as distant galaxies)
+    function createParticles() {
+        const particleContainer = document.createElement('div');
+        particleContainer.classList.add('particle-container');
+        particleContainer.style.position = 'fixed';
+        particleContainer.style.top = '0';
+        particleContainer.style.left = '0';
+        particleContainer.style.width = '100%';
+        particleContainer.style.height = '100%';
+        particleContainer.style.pointerEvents = 'none';
+        particleContainer.style.zIndex = '-1';
+        
+        document.body.appendChild(particleContainer);
+        
+        // Create particle styles
+        const styleSheet = document.createElement('style');
+        styleSheet.innerHTML = `
+            .particle {
+                position: absolute;
+                width: 3px;
+                height: 3px;
+                background-color: rgba(255, 255, 255, 0.7);
+                border-radius: 50%;
+                pointer-events: none;
+                box-shadow: 0 0 6px rgba(255, 255, 255, 0.6);
+            }
+            
+            @keyframes floating {
+                0% {
+                    transform: translateY(0) translateX(0) scale(1);
+                    opacity: 0;
+                }
+                50% {
+                    opacity: var(--max-opacity);
+                }
+                100% {
+                    transform: translateY(var(--move-y)) translateX(var(--move-x)) scale(var(--scale));
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(styleSheet);
+        
+        // Create particles
+        for (let i = 0; i < 30; i++) {
+            setTimeout(() => {
+                createDistantGalaxy(particleContainer);
+            }, i * 300);
+        }
+        
+        // Continuously create particles
+        setInterval(() => {
+            createDistantGalaxy(particleContainer);
+        }, 2000);
+    }
+    
+    function createDistantGalaxy(container) {
+        const particle = document.createElement('div');
+        particle.classList.add('particle');
+        
+        const size = Math.random() * 3 + 2;
+        const posX = Math.random() * 100;
+        const posY = Math.random() * 100;
+        const opacity = Math.random() * 0.4 + 0.2;
+        const duration = Math.random() * 20 + 20;
+        const moveX = (Math.random() - 0.5) * 50;
+        const moveY = (Math.random() - 0.5) * 50;
+        const scale = Math.random() * 0.7 + 0.3;
+        
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+        particle.style.left = `${posX}%`;
+        particle.style.top = `${posY}%`;
+        particle.style.setProperty('--max-opacity', opacity);
+        particle.style.setProperty('--move-x', `${moveX}px`);
+        particle.style.setProperty('--move-y', `${moveY}px`);
+        particle.style.setProperty('--scale', scale);
+        particle.style.animation = `floating ${duration}s ease-in-out forwards`;
+        
+        container.appendChild(particle);
+        
+        // Remove particle after animation
+        setTimeout(() => {
+            if (particle.parentNode) {
+                particle.parentNode.removeChild(particle);
+            }
+        }, duration * 1000);
     }
     
     // Confetti animation when key is revealed
     function createConfetti() {
-        const colors = ['#4361ee', '#7209b7', '#f72585', '#ff9e00'];
+        const colors = ['#7e22ce', '#ec4899', '#f59e0b', '#10b981'];
         
-        for (let i = 0; i < 60; i++) {
+        for (let i = 0; i < 80; i++) {
             const confetti = document.createElement('div');
             const size = Math.random() * 10 + 5;
             
@@ -191,8 +367,8 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Animation
             confetti.style.animation = `
-                fall ${Math.random() * 3 + 3}s linear forwards,
-                sway ${Math.random() * 2 + 3}s ease-in-out infinite alternate
+                fall ${Math.random() * 3 + 4}s linear forwards,
+                sway ${Math.random() * 3 + 4}s ease-in-out infinite alternate
             `;
             
             document.querySelector('.card').appendChild(confetti);
@@ -202,7 +378,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (confetti.parentNode) {
                     confetti.parentNode.removeChild(confetti);
                 }
-            }, 6000);
+            }, 8000);
         }
         
         // Add CSS for confetti animations if not exists
@@ -213,16 +389,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 @keyframes fall {
                     to {
                         top: 100%;
-                        transform: translateY(0) rotate(${Math.random() * 1000}deg);
+                        transform: translateY(0) rotate(${Math.random() * 1200}deg);
                     }
                 }
                 
                 @keyframes sway {
                     from {
-                        transform: translateX(-20px) rotate(${Math.random() * 360}deg);
+                        transform: translateX(-30px) rotate(${Math.random() * 360}deg);
                     }
                     to {
-                        transform: translateX(20px) rotate(${Math.random() * 360}deg);
+                        transform: translateX(30px) rotate(${Math.random() * 360}deg);
                     }
                 }
             `;
