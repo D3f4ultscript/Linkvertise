@@ -15,10 +15,23 @@
         <div class="warning-content">
             <i class="fas fa-shield-alt"></i>
             <h2>Access Denied</h2>
-            <p>You need to go through the key system to access this page.</p>
-            <p>Click the button below to visit the key system and verify your access.</p>
+            <p>Please access this page through the proper Linkvertise link after watching the advertisement.</p>
+            <p>Direct access is not allowed.</p>
             <button id="closeWarning" class="btn btn-warning">
-                <i class="fas fa-external-link-alt"></i> Go to Key System
+                <i class="fas fa-times"></i> Close
+            </button>
+        </div>
+    </div>
+    
+    <!-- Secondary Warning that appears after 10 seconds -->
+    <div id="secondaryWarningOverlay" class="warning-overlay">
+        <div class="warning-content">
+            <i class="fas fa-exclamation-triangle"></i>
+            <h2>Important Notice</h2>
+            <p>You need to complete the steps on Linkvertise to access this content.</p>
+            <p>Please follow the link below to proceed:</p>
+            <button id="redirectButton" class="btn btn-warning">
+                <i class="fas fa-external-link-alt"></i> Go to Linkvertise
             </button>
         </div>
     </div>
@@ -52,6 +65,12 @@
                     </div>
                     <div id="successMessage" class="success-message">
                         <i class="fas fa-check"></i> Key copied to clipboard!
+                    </div>
+                    
+                    <!-- Redirect Countdown Notice -->
+                    <div id="redirectNotice" class="redirect-notice">
+                        <i class="fas fa-sync fa-spin"></i>
+                        <p>Redirecting to Linkvertise in <span id="redirectCountdown">10</span> seconds...</p>
                     </div>
                 </div>
             </div>

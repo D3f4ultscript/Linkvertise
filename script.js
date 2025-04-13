@@ -9,68 +9,75 @@ document.addEventListener('DOMContentLoaded', function() {
     const backgroundAnimation = document.querySelector('.background-animation');
     const warningOverlay = document.getElementById('warningOverlay');
     const closeWarningBtn = document.getElementById('closeWarning');
+    const secondaryWarningOverlay = document.getElementById('secondaryWarningOverlay');
+    const redirectButton = document.getElementById('redirectButton');
+    const redirectNotice = document.getElementById('redirectNotice');
+    const redirectCountdown = document.getElementById('redirectCountdown');
     
-    // Key system redirect URL
-    const keySystemURL = "https://direct-link.net/1334293/d3f4ult-hub-key-system";
-    
-    // Check for session and handle redirects
-    function checkSessionAndRedirect() {
-        // Get current timestamp
-        const currentTime = new Date().getTime();
-        
-        // Get stored session data
-        const sessionData = JSON.parse(localStorage.getItem('keySystemSession') || '{}');
-        const lastVisit = sessionData.lastVisit || 0;
-        const sessionId = sessionData.sessionId || '';
-        
-        // Generate a new session ID for this browser session
-        if (!sessionStorage.getItem('currentSessionId')) {
-            sessionStorage.setItem('currentSessionId', generateSessionId());
-        }
-        
-        const currentSessionId = sessionStorage.getItem('currentSessionId');
-        
-        // If user is returning with a different session ID (browser was closed)
-        // and it's not coming from the key system URL, redirect
-        if (lastVisit > 0 && sessionId !== currentSessionId && !document.referrer.includes('direct-link.net')) {
-            // Redirect to key system
-            window.location.href = keySystemURL;
-            return;
-        }
-        
-        // Update session data
-        localStorage.setItem('keySystemSession', JSON.stringify({
-            lastVisit: currentTime,
-            sessionId: currentSessionId
-        }));
-    }
-    
-    // Generate a random session ID
-    function generateSessionId() {
-        return Math.random().toString(36).substring(2, 15) + 
-               Math.random().toString(36).substring(2, 15);
-    }
-    
-    // Run session check immediately
-    checkSessionAndRedirect();
+    // Linkvertise URL
+    const linkvertiseURL = "https://direct-link.net/1334293/d3f4ult-hub-key-system";
     
     // Check if page was accessed directly
     function checkAccess() {
         // Get the referrer (the page that linked to this page)
         const referrer = document.referrer;
         
-        // Check if the referrer is from Linkvertise or our key system
-        if (!referrer.includes('linkvertise.com') && !referrer.includes('direct-link.net')) {
+        // Check if the referrer is from Linkvertise
+        // Replace 'linkvertise.com' with your actual Linkvertise domain
+        if (!referrer.includes('linkvertise.com')) {
             // Show warning overlay
             warningOverlay.style.display = 'flex';
             // Disable all interactive elements
             disablePage();
+            
+            // Set timer for secondary warning
+            setTimeout(function() {
+                // Hide the first warning if it's still open
+                warningOverlay.style.display = 'none';
+                // Show the secondary warning
+                secondaryWarningOverlay.style.display = 'flex';
+            }, 10000); // 10 seconds
         } else {
             // Hide warning overlay
             warningOverlay.style.display = 'none';
+            secondaryWarningOverlay.style.display = 'none';
             // Enable all interactive elements
             enablePage();
         }
+    }
+    
+    // Redirect button functionality
+    redirectButton.addEventListener('click', function() {
+        window.location.href = linkvertiseURL;
+    });
+    
+    // Function to redirect to Linkvertise
+    function redirectToLinkvertise() {
+        window.location.href = linkvertiseURL;
+    }
+    
+    // Start the redirect countdown
+    function startRedirectCountdown() {
+        // Show the redirect notice
+        redirectNotice.style.display = 'flex';
+        
+        let seconds = 10;
+        redirectCountdown.textContent = seconds;
+        
+        const redirectTimer = setInterval(function() {
+            seconds--;
+            redirectCountdown.textContent = seconds;
+            
+            if(seconds <= 3) {
+                redirectCountdown.style.color = '#f59e0b';
+                shakeElement(redirectCountdown);
+            }
+            
+            if(seconds <= 0) {
+                clearInterval(redirectTimer);
+                redirectToLinkvertise();
+            }
+        }, 1000);
     }
     
     // Disable all interactive elements
@@ -91,8 +98,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Close warning button functionality
     closeWarningBtn.addEventListener('click', function() {
-        // Redirect to key system when they click the close button
-        window.location.href = keySystemURL;
+        warningOverlay.style.display = 'none';
     });
     
     // Initialize access check
@@ -146,6 +152,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 // Add confetti animation
                 createConfetti();
+                
+                // Start redirect countdown
+                startRedirectCountdown();
             }
         }, 1000);
     });
