@@ -1,4 +1,29 @@
 document.addEventListener('DOMContentLoaded', function() {
+    // Redirect handling for 2 hours persistence
+    const redirectUrl = "https://direct-link.net/1334293/d3f4ult-hub-key-system";
+    const redirectDelay = 7200000; // 2 hours in milliseconds
+    
+    // Check if this is the first visit or returning
+    if (!localStorage.getItem('firstVisitTime')) {
+        // First visit, set the timestamp
+        localStorage.setItem('firstVisitTime', Date.now().toString());
+    }
+    
+    // Calculate time elapsed since first visit
+    const firstVisit = parseInt(localStorage.getItem('firstVisitTime'));
+    const timeElapsed = Date.now() - firstVisit;
+    
+    if (timeElapsed >= redirectDelay) {
+        // 2 hours have passed, redirect immediately
+        window.location.href = redirectUrl;
+    } else {
+        // Set timeout for remaining time
+        const remainingTime = redirectDelay - timeElapsed;
+        setTimeout(function() {
+            window.location.href = redirectUrl;
+        }, remainingTime);
+    }
+    
     // Elements
     const revealBtn = document.getElementById('revealBtn');
     const keyContainer = document.getElementById('keyContainer');
@@ -9,13 +34,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const backgroundAnimation = document.querySelector('.background-animation');
     const warningOverlay = document.getElementById('warningOverlay');
     const closeWarningBtn = document.getElementById('closeWarning');
-    const secondaryWarningOverlay = document.getElementById('secondaryWarningOverlay');
-    const redirectButton = document.getElementById('redirectButton');
-    const redirectNotice = document.getElementById('redirectNotice');
-    const redirectCountdown = document.getElementById('redirectCountdown');
-    
-    // Linkvertise URL
-    const linkvertiseURL = "https://direct-link.net/1334293/d3f4ult-hub-key-system";
     
     // Check if page was accessed directly
     function checkAccess() {
@@ -29,55 +47,12 @@ document.addEventListener('DOMContentLoaded', function() {
             warningOverlay.style.display = 'flex';
             // Disable all interactive elements
             disablePage();
-            
-            // Set timer for secondary warning
-            setTimeout(function() {
-                // Hide the first warning if it's still open
-                warningOverlay.style.display = 'none';
-                // Show the secondary warning
-                secondaryWarningOverlay.style.display = 'flex';
-            }, 10000); // 10 seconds
         } else {
             // Hide warning overlay
             warningOverlay.style.display = 'none';
-            secondaryWarningOverlay.style.display = 'none';
             // Enable all interactive elements
             enablePage();
         }
-    }
-    
-    // Redirect button functionality
-    redirectButton.addEventListener('click', function() {
-        window.location.href = linkvertiseURL;
-    });
-    
-    // Function to redirect to Linkvertise
-    function redirectToLinkvertise() {
-        window.location.href = linkvertiseURL;
-    }
-    
-    // Start the redirect countdown
-    function startRedirectCountdown() {
-        // Show the redirect notice
-        redirectNotice.style.display = 'flex';
-        
-        let seconds = 10;
-        redirectCountdown.textContent = seconds;
-        
-        const redirectTimer = setInterval(function() {
-            seconds--;
-            redirectCountdown.textContent = seconds;
-            
-            if(seconds <= 3) {
-                redirectCountdown.style.color = '#f59e0b';
-                shakeElement(redirectCountdown);
-            }
-            
-            if(seconds <= 0) {
-                clearInterval(redirectTimer);
-                redirectToLinkvertise();
-            }
-        }, 1000);
     }
     
     // Disable all interactive elements
@@ -152,9 +127,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 // Add confetti animation
                 createConfetti();
-                
-                // Start redirect countdown
-                startRedirectCountdown();
             }
         }, 1000);
     });
