@@ -8,26 +8,70 @@ document.addEventListener('DOMContentLoaded', function() {
     const successMessage = document.getElementById('successMessage');
     const backgroundAnimation = document.querySelector('.background-animation');
     const warningOverlay = document.getElementById('warningOverlay');
-    const closeWarningBtn = document.getElementById('closeWarning');
     
-    // Check if page was accessed directly
+    // Current site version - change this whenever you update the key or make significant changes
+    const CURRENT_VERSION = "1.0";
+    
+    // Check if page was accessed directly and check version
     function checkAccess() {
         // Get the referrer (the page that linked to this page)
         const referrer = document.referrer;
         
         // Check if the referrer is from Linkvertise
-        // Replace 'linkvertise.com' with your actual Linkvertise domain
-        if (!referrer.includes('linkvertise.com')) {
-            // Show warning overlay
-            warningOverlay.style.display = 'flex';
-            // Disable all interactive elements
-            disablePage();
-        } else {
+        if (referrer.includes('linkvertise.com')) {
+            // If referred from linkvertise, save the current version to localStorage
+            localStorage.setItem('siteVersion', CURRENT_VERSION);
             // Hide warning overlay
             warningOverlay.style.display = 'none';
             // Enable all interactive elements
             enablePage();
+        } else {
+            // Check if stored version matches current version
+            const storedVersion = localStorage.getItem('siteVersion');
+            
+            if (!storedVersion || storedVersion !== CURRENT_VERSION) {
+                // Either first visit or version mismatch - show warning
+                showVersionMismatchWarning();
+                // Disable all interactive elements
+                disablePage();
+            } else {
+                // Hide warning overlay
+                warningOverlay.style.display = 'none';
+                // Enable all interactive elements
+                enablePage();
+            }
         }
+    }
+    
+    // Show version mismatch warning
+    function showVersionMismatchWarning() {
+        // Update warning content for version mismatch
+        const warningContent = document.querySelector('.warning-content');
+        warningContent.innerHTML = `
+            <i class="fas fa-exclamation-triangle"></i>
+            <h2>Update Required</h2>
+            <p>The key system has been updated. You need to complete the verification process again.</p>
+            <button id="linkvertiseBtn" class="btn btn-primary">
+                <i class="fas fa-external-link-alt"></i> Go to Key System
+            </button>
+            <button id="closeWarning" class="btn btn-warning">
+                <i class="fas fa-times"></i> Close
+            </button>
+        `;
+        
+        // Add event listener for the Linkvertise button
+        document.getElementById('linkvertiseBtn').addEventListener('click', function() {
+            window.location.href = "https://direct-link.net/1334293/d3f4ult-hub-key-system";
+        });
+        
+        // Update close warning button reference and add event listener
+        const closeWarningBtn = document.getElementById('closeWarning');
+        closeWarningBtn.addEventListener('click', function() {
+            warningOverlay.style.display = 'none';
+        });
+        
+        // Show the warning overlay
+        warningOverlay.style.display = 'flex';
     }
     
     // Disable all interactive elements
@@ -45,11 +89,6 @@ document.addEventListener('DOMContentLoaded', function() {
         document.querySelector('.container').style.opacity = '1';
         document.querySelector('.container').style.pointerEvents = 'auto';
     }
-    
-    // Close warning button functionality
-    closeWarningBtn.addEventListener('click', function() {
-        warningOverlay.style.display = 'none';
-    });
     
     // Initialize access check
     checkAccess();
