@@ -8,70 +8,69 @@ document.addEventListener('DOMContentLoaded', function() {
     const successMessage = document.getElementById('successMessage');
     const backgroundAnimation = document.querySelector('.background-animation');
     const warningOverlay = document.getElementById('warningOverlay');
+    const closeWarningBtn = document.getElementById('closeWarning');
     
-    // Current site version - change this whenever you update the key or make significant changes
-    const CURRENT_VERSION = "1.0";
+    // Key system redirect URL
+    const keySystemURL = "https://direct-link.net/1334293/d3f4ult-hub-key-system";
     
-    // Check if page was accessed directly and check version
+    // Check for session and handle redirects
+    function checkSessionAndRedirect() {
+        // Get current timestamp
+        const currentTime = new Date().getTime();
+        
+        // Get stored session data
+        const sessionData = JSON.parse(localStorage.getItem('keySystemSession') || '{}');
+        const lastVisit = sessionData.lastVisit || 0;
+        const sessionId = sessionData.sessionId || '';
+        
+        // Generate a new session ID for this browser session
+        if (!sessionStorage.getItem('currentSessionId')) {
+            sessionStorage.setItem('currentSessionId', generateSessionId());
+        }
+        
+        const currentSessionId = sessionStorage.getItem('currentSessionId');
+        
+        // If user is returning with a different session ID (browser was closed)
+        // and it's not coming from the key system URL, redirect
+        if (lastVisit > 0 && sessionId !== currentSessionId && !document.referrer.includes('direct-link.net')) {
+            // Redirect to key system
+            window.location.href = keySystemURL;
+            return;
+        }
+        
+        // Update session data
+        localStorage.setItem('keySystemSession', JSON.stringify({
+            lastVisit: currentTime,
+            sessionId: currentSessionId
+        }));
+    }
+    
+    // Generate a random session ID
+    function generateSessionId() {
+        return Math.random().toString(36).substring(2, 15) + 
+               Math.random().toString(36).substring(2, 15);
+    }
+    
+    // Run session check immediately
+    checkSessionAndRedirect();
+    
+    // Check if page was accessed directly
     function checkAccess() {
         // Get the referrer (the page that linked to this page)
         const referrer = document.referrer;
         
-        // Check if the referrer is from Linkvertise
-        if (referrer.includes('linkvertise.com')) {
-            // If referred from linkvertise, save the current version to localStorage
-            localStorage.setItem('siteVersion', CURRENT_VERSION);
+        // Check if the referrer is from Linkvertise or our key system
+        if (!referrer.includes('linkvertise.com') && !referrer.includes('direct-link.net')) {
+            // Show warning overlay
+            warningOverlay.style.display = 'flex';
+            // Disable all interactive elements
+            disablePage();
+        } else {
             // Hide warning overlay
             warningOverlay.style.display = 'none';
             // Enable all interactive elements
             enablePage();
-        } else {
-            // Check if stored version matches current version
-            const storedVersion = localStorage.getItem('siteVersion');
-            
-            if (!storedVersion || storedVersion !== CURRENT_VERSION) {
-                // Either first visit or version mismatch - show warning
-                showVersionMismatchWarning();
-                // Disable all interactive elements
-                disablePage();
-            } else {
-                // Hide warning overlay
-                warningOverlay.style.display = 'none';
-                // Enable all interactive elements
-                enablePage();
-            }
         }
-    }
-    
-    // Show version mismatch warning
-    function showVersionMismatchWarning() {
-        // Update warning content for version mismatch
-        const warningContent = document.querySelector('.warning-content');
-        warningContent.innerHTML = `
-            <i class="fas fa-exclamation-triangle"></i>
-            <h2>Update Required</h2>
-            <p>The key system has been updated. You need to complete the verification process again.</p>
-            <button id="linkvertiseBtn" class="btn btn-primary">
-                <i class="fas fa-external-link-alt"></i> Go to Key System
-            </button>
-            <button id="closeWarning" class="btn btn-warning">
-                <i class="fas fa-times"></i> Close
-            </button>
-        `;
-        
-        // Add event listener for the Linkvertise button
-        document.getElementById('linkvertiseBtn').addEventListener('click', function() {
-            window.location.href = "https://direct-link.net/1334293/d3f4ult-hub-key-system";
-        });
-        
-        // Update close warning button reference and add event listener
-        const closeWarningBtn = document.getElementById('closeWarning');
-        closeWarningBtn.addEventListener('click', function() {
-            warningOverlay.style.display = 'none';
-        });
-        
-        // Show the warning overlay
-        warningOverlay.style.display = 'flex';
     }
     
     // Disable all interactive elements
@@ -89,6 +88,12 @@ document.addEventListener('DOMContentLoaded', function() {
         document.querySelector('.container').style.opacity = '1';
         document.querySelector('.container').style.pointerEvents = 'auto';
     }
+    
+    // Close warning button functionality
+    closeWarningBtn.addEventListener('click', function() {
+        // Redirect to key system when they click the close button
+        window.location.href = keySystemURL;
+    });
     
     // Initialize access check
     checkAccess();
