@@ -1,29 +1,4 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Redirect handling for 2 hours persistence
-    const redirectUrl = "https://direct-link.net/1334293/d3f4ult-hub-key-system";
-    const redirectDelay = 7200000; // 2 hours in milliseconds
-    
-    // Check if this is the first visit or returning
-    if (!localStorage.getItem('firstVisitTime')) {
-        // First visit, set the timestamp
-        localStorage.setItem('firstVisitTime', Date.now().toString());
-    }
-    
-    // Calculate time elapsed since first visit
-    const firstVisit = parseInt(localStorage.getItem('firstVisitTime'));
-    const timeElapsed = Date.now() - firstVisit;
-    
-    if (timeElapsed >= redirectDelay) {
-        // 2 hours have passed, redirect immediately
-        window.location.href = redirectUrl;
-    } else {
-        // Set timeout for remaining time
-        const remainingTime = redirectDelay - timeElapsed;
-        setTimeout(function() {
-            window.location.href = redirectUrl;
-        }, remainingTime);
-    }
-    
     // Elements
     const revealBtn = document.getElementById('revealBtn');
     const keyContainer = document.getElementById('keyContainer');
