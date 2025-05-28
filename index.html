@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Premium Key Generator</title>
+    <title>D3f4ult Hub Key Generator</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
@@ -27,17 +27,17 @@
         <div class="card">
             <div class="card-glow"></div>
             <div class="timer-section">
-                <h2><i class="fas fa-sync-alt fa-spin-pulse"></i> New Key:</h2>
+                <h2><i class="fas fa-lock"></i> D3f4ult Hub</h2>
                 <div class="timer">
                     <i class="fas fa-clock"></i>
-                    <span>In one week</span>
+                    <span id="keyValidity">Keys valid for 6 hours</span>
                 </div>
             </div>
             
-            <h1>Your Premium Key</h1>
+            <h1>Key Generator</h1>
             
-            <button id="revealBtn" class="btn pulse">
-                <i class="fas fa-key"></i> Show Key
+            <button id="generateBtn" class="btn pulse">
+                <i class="fas fa-key"></i> Generate Key
             </button>
             
             <div id="keyContainer" class="key-container">
@@ -45,7 +45,7 @@
                 
                 <div id="keyDisplay" class="key-display">
                     <div class="key-value">
-                        <span class="key-text">D3F4ULT-KEY-njokgbfdskjhb97826345</span>
+                        <span id="keyText" class="key-text">Generating...</span>
                         <button id="copyBtn" class="btn btn-copy">
                             <i class="fas fa-copy"></i> Copy
                         </button>
@@ -54,6 +54,11 @@
                         <i class="fas fa-check"></i> Key copied to clipboard!
                     </div>
                 </div>
+            </div>
+            
+            <div class="user-info">
+                <p>Key is unique to your Roblox account</p>
+                <p>Key expires after 6 hours</p>
             </div>
             
             <div class="decoration-line"></div>

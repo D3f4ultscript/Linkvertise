@@ -826,4 +826,48 @@ h1::after {
     font-size: 2.5rem;
     margin-bottom: 1.5rem;
     filter: drop-shadow(0 0 10px rgba(236, 72, 153, 0.5));
+}
+
+/* Add styles for the user info section */
+.user-info {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: rgba(139, 92, 246, 0.1);
+    border-radius: 10px;
+    border: 1px solid var(--light-border);
+    font-size: 0.9rem;
+    color: var(--text);
+}
+
+.user-info p {
+    margin: 5px 0;
+}
+
+/* Add shake animation */
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+    20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+.shake {
+    animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+}
+
+/* Adjust key display text */
+.key-text {
+    font-family: 'Roboto Mono', monospace;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--accent-light);
+    letter-spacing: 0.5px;
+    text-shadow: 0 0 8px rgba(245, 158, 11, 0.3);
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    white-space: nowrap;
+    margin-bottom: 5px;
+    padding: 10px;
+    background-color: var(--key-text-bg);
+    border-radius: 6px;
 } 
